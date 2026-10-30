@@ -1,15 +1,22 @@
 # let
+
 yet another pacman wrapper
 
 ## usage
 
 ```bash
-let package in   # install a package
-let package out  # remove a package
+let package in       # install a package
+let package update   # update a package
+let package out      # remove a package
+let package denied   # remove a package and its unused dependencies
+let updatesys        # update the entire system
 ```
 
-- `in` → `pacman -S package`
-- `out` → `pacman -Rns package`
+- `in` → `pacman -S --needed package`
+- `update` → `pacman -S package`
+- `out` → `pacman -R package`
+- `denied` → `pacman -Rns package`
+- `updatesys` → `pacman -Syu`
 
 ## installation
 
