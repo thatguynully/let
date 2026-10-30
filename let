@@ -1,26 +1,40 @@
 #!/usr/bin/env bash
-# SPDX-License-Identifier: GPL-3.0-or-later
 
 set -e
 
 usage() {
-  echo "Usage: let <package> in|out" >&2
+  echo "Usage: let <package> <action>" >&2
+  echo "Actions: in, out, denied, updated, updatesys" >&2
   exit 1
 }
 
-if [ "$#" -ne 2 ]; then
+if [ "$#" -lt 1 ]; then
   usage
 fi
 
-package="$1"
-action="$2"
+action="${!#}"
+package="${@:1:$#-1}"
 
 case "$action" in
   in)
+    [ "$#" -eq 2 ] || usage
     sudo pacman -S --needed "$package"
     ;;
   out)
+    [ "$#" -eq 2 ] || usage
+    sudo pacman -R "$package"
+    ;;
+  denied)
+    [ "$#" -eq 2 ] || usage
     sudo pacman -Rns "$package"
+    ;;
+  updated)
+    [ "$#" -eq 2 ] || usage
+    sudo pacman -S "$package"
+    ;;
+  updatesys)
+    [ "$#" -eq 1 ] || usage
+    sudo pacman -Syu
     ;;
   *)
     usage
